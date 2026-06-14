@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Help & About</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <span>TaskFlow</span>
+                <div class="logo-dot"></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-task.html">Add Task</a></li>
+                <li><a href="task-list.html">Task List</a></li>
+                <li><a href="task-detail.html">Task Detail</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-container">
+
+        <!-- DELEGATION BANNER (For Team Member) -->
+        <div class="stub-note">
+            <h3>🚧 Member 5 Tasks & Requirements</h3>
+            <p>This page is assigned to <strong>Member 5</strong>. In your personal feature branch, implement the following:</p>
+            <ul>
+                <li>Branch Convention: <code>feature/&lt;github-username&gt;/about</code></li>
+                <li>Build a comprehensive description page explaining TaskFlow's purpose, design features, and deployment structure.</li>
+                <li>Include a step-by-step Help/Usage Guide explaining how to navigate pages, create tasks, and manage completion.</li>
+                <li>Make sure the styling matches the premium design elements in <code>style.css</code>.</li>
+            </ul>
+        </div>
+
+        <!-- About and Help Content -->
+        <div class="grid-2col" style="margin-bottom: 2rem;">
+            
+            <!-- App Purpose -->
+            <div class="card">
+                <h1>About TaskFlow</h1>
+                <p>
+                    TaskFlow is a lightweight, responsive task management tool designed to coordinate agile devops actions and deployments. Built on top of Nginx web service runtimes, TaskFlow serves as the foundational application to test modern automated CI/CD integration pipelines.
+                </p>
+                <p>
+                    By leveraging browser storage, the application maintains state consistency across pages without needing heavy back-end database servers. This makes it extremely fast, portable, and ideal for containerized execution.
+                </p>
+            </div>
+
+            <!-- Simple Usage Guide -->
+            <div class="card">
+                <h2>Usage Guide</h2>
+                <p style="font-size: 0.9rem;">Follow these steps to operate the TaskFlow Dashboard registry:</p>
+                
+                <ul class="step-list">
+                    <li class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Register a Node</h4>
+                            <p style="font-size: 0.85rem; margin-bottom: 0;">Navigate to the <strong>Add Task</strong> page and populate Title, Description, Date, and Priority levels.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Monitor the Board</h4>
+                            <p style="font-size: 0.85rem; margin-bottom: 0;">Open the <strong>Task List</strong> and filter records by status to keep track of assignments.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Inspect & Complete</h4>
+                            <p style="font-size: 0.85rem; margin-bottom: 0;">Select "Inspect" on any task to view full parameters, mark tasks as completed, or delete records.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 TaskFlow Core DevOps. Template created by Team Lead.</p>
+    </footer>
+
+</body>
+</html>

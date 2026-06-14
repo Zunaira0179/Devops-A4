@@ -1,0 +1,365 @@
+DevOps Fundamentals [Spring, 2026]
+Assignment 04 – CI/CD Pipeline Integration
+Total Marks: 100   |   Weeks Covered: 10 – 14   |   CLO: CLO2
+
+OBJECTIVES
+Students will design and implement a complete CI/CD pipeline for a containerized web application by integrating a CI workflow (triggered on a Pull Request) with a CD workflow (triggered on a merge/push to the develop branch). The assignment covers creating a fresh GitHub repository, versioning the assignment document, configuring GitHub Environments, managing secrets, and chaining two GitHub Actions workflows.
+
+By the end of this assignment, students will be able to:
+Create a new GitHub repository from scratch and establish a proper branching strategy.
+Version the assignment question paper inside the GitHub repository.
+Create and configure a GitHub Development Environment with appropriate secrets.
+Design and implement a CI workflow triggered by a Pull Request targeting the “develop” branch.
+Design and implement a CD workflow triggered by a push event on the “develop” branch.
+Verify end-to-end automated delivery from a code push to a live deployment on Render.
+
+IMPORTANT INSTRUCTIONS
+Group Size: Five (5) students per group (can be six members but in that case TL has to create an additional page for that member and then assign all tasks accordingly)
+Team Lead (TL): One student will act as the Team Lead; others will be Team Members.
+New Repository: Students MUST create a brand-new GitHub repository for this assignment. Do NOT reuse or fork any repository from a previous assignment.
+Assignment Document in Repo: The Assignment 04 question paper (this .docx file) must be committed to the root of the repository. Each student must fill in their own details in their respective row in Table 1 (Group Details) directly inside the versioned document.
+Secrets Ownership: All GitHub secrets (DOCKERHUB_USERNAME, DOCKERHUB_TOKEN, RENDER_DEPLOY_HOOK_URL) must be created by the Team Lead using the TL's own Docker Hub and Render credentials. No team member other than the TL should create or modify secrets.
+All deployments MUST be triggered via the GitHub Actions CD pipeline. Manual deployment on Render is NOT allowed after the initial service setup.
+Only the Team Lead will submit the final document to the LMS.
+Plagiarism will result in ZERO marks for all involved members.
+Each team member must work on their own feature branch and open a Pull Request (PR) targeting the “develop” branch.
+
+GROUP DETAILS
+Table 1: Group Details , Each student must fill their own row (including Assigned Page) in the versioned copy inside the repo
+Sr #
+Student Name
+GitHub Username
+Role (Lead/Member)
+Assigned Page
+Branch Worked On
+Screenshots Added (Yes/No)
+1
+
+
+
+
+
+
+2
+
+
+
+
+
+
+3
+
+
+
+
+
+
+4
+
+
+
+
+
+
+5
+
+
+
+
+
+
+
+Group Repository URL:
+[Paste Your GitHub Repository URL Here]
+Deployed Application URL:
+[Paste Your Render Live URL Here]
+
+SCENARIO
+Your team is the development crew for TaskFlow, a lightweight task-management web application consisting of five HTML pages. The Team Lead sets up the repository, Dockerfile, shared stylesheet, and the CI/CD pipelines. Each team member is then individually responsible for building one specific page of the application, following the full Git, GitHub, and Docker flow independently.
+
+The 5 pages of the TaskFlow application and their assignment are defined in Table 3 below. The Team Lead takes Page 1 (Home / Dashboard) in addition to their setup responsibilities.
+
+Table 3: TaskFlow Page Assignment
+Sr #
+Page File
+Page Name
+Page Responsibility
+1
+index.html
+Home / Dashboard
+Overview of all tasks: summary counts (total, pending, completed), a welcome message, and navigation links to all other pages.
+2
+add-task.html
+Add Task
+An HTML form allowing the user to enter a new task , fields for task title, description, due date, and priority (High / Medium / Low).
+3
+task-list.html
+Task List
+A table listing all tasks with columns for title, due date, priority, and status. Includes basic filter buttons (All / Pending / Completed).
+4
+task-detail.html
+Task Detail
+A page displaying the full details of a single selected task, with an option to mark it as complete or delete it.
+5
+about.html
+About / Help
+A page describing the TaskFlow application, its purpose, and a simple usage guide explaining how to navigate and use the app.
+
+Each member's individual workflow:
+Create a personal feature branch from “develop” using the naming convention: feature/<member-github-username>/<page-name>  (e.g., feature/ali-hassan/add-task).
+Build the assigned HTML page with appropriate content and link it to the shared style.css.
+Commit the page file and push the feature branch to GitHub.
+Open a Pull Request (PR) targeting the “develop” branch. This triggers the CI workflow automatically.
+Once CI passes and the PR is reviewed and approved, the Team Lead merges the PR. The merge generates a push event on “develop”, which triggers the CD workflow and deploys the updated application to Render.
+
+Complete automated flow:  Feature Branch → PR opened → CI builds & pushes Docker image → PR merged → push on “develop” → CD deploys to Render → Live TaskFlow updated with the new page.
+
+REPOSITORY SETUP (NEW REPO FROM SCRATCH)
+The Team Lead must complete the following setup steps before the team starts working:
+Create a new public GitHub repository named taskflow-cicd (or a name agreed by the team). Do NOT clone or fork any existing repository.
+Create a “develop” branch from 'main' and set it as the default working branch.
+Apply Branch Protection Rules on “develop”: require at least one PR review and require the CI status check to pass before merging.
+Team Lead: Sign up on Render (render.com), create a new Web Service connected to the Docker Hub image repository, and copy the deploy hook URL from the Render service settings. This URL will be stored as the RENDER_DEPLOY_HOOK_URL secret.
+Commit the Assignment 04 question paper (this .docx file) to the root of the repository. Each team member must then update Table 1 with their own details in the file and commit to their feature branch.
+
+Required repository structure:
+Table 2: Expected Repository Structure
+File / Folder
+Purpose
+index.html
+Home / Dashboard page , created by Member 1
+add-task.html
+Add Task page , created by Member 2
+task-list.html
+Task List page , created by Member 3
+task-detail.html
+Task Detail page , created by Member 4
+about.html
+About / Help page , created by Member 5
+style.css
+Shared stylesheet , consistent look across all pages
+Dockerfile
+Dockerfile to containerize the application (nginx-based)
+.github/workflows/ci.yml
+CI workflow – triggered on Pull Request to “develop”
+.github/workflows/cd.yml
+CD workflow – triggered on push (merge) to “develop”
+Assignment_04_Spring2026.docx
+This assignment question paper (versioned in repo)
+
+GITHUB DEVELOPMENT ENVIRONMENT & SECRETS (MANDATORY)
+The Team Lead (TL) is responsible for creating all secrets listed below. The TL is the repository admin and the credentials in use , Docker Hub and Render , belong to the TL's accounts. No other team member should create or modify these secrets.
+
+1. GitHub Environment
+Go to: Repository → Settings → Environments → New environment
+Environment Name: development
+
+2. Required Secrets
+Table 4: Secrets Configuration Reference
+Scope
+Secret Name
+Value / Description
+Repository
+DOCKERHUB_USERNAME
+Team Lead's Docker Hub account username
+Repository
+DOCKERHUB_TOKEN
+Team Lead's Docker Hub Personal Access Token (PAT) , generated from the TL's Docker Hub account
+Environment (development)
+RENDER_DEPLOY_HOOK_URL
+Deploy-hook webhook URL from the Render web service created by the Team Lead
+
+All three secrets must be created by the Team Lead, as the TL is the repository admin and the credentials belong to them. DOCKERHUB_USERNAME and DOCKERHUB_TOKEN must be the Team Lead's own Docker Hub credentials, added as repository-level secrets (Settings → Secrets and variables → Actions → Repository secrets). RENDER_DEPLOY_HOOK_URL is obtained from the Render web service set up by the Team Lead and must be added as an environment-level secret inside the “development” environment (Settings → Environments → development → Add secret).
+
+CI PIPELINE REQUIREMENTS  (.github/workflows/ci.yml)
+Trigger: The CI workflow must be triggered by a pull_request event targeting the “develop” branch only.
+
+The CI workflow must include the following steps in order:
+Step 1 – Checkout: Check out the repository code using actions/checkout.
+Step 2 – Docker Login: Authenticate with Docker Hub using the DOCKERHUB_USERNAME and DOCKERHUB_TOKEN repository secrets.
+Step 3 – Build Image: Build the Docker image from the Dockerfile in the project root.
+Step 4 – Tag Image: Tag the image using a meaningful strategy , at minimum the 'latest' tag; optionally also tag with the short commit SHA (github.sha).
+Step 5 – Push Image: Push the tagged image to Docker Hub.
+
+Additional requirements:
+The workflow must fail the entire run if any step fails, preventing a broken image from being available for deployment.
+The CI status check must appear as a required check in the Branch Protection Rules on “develop”.
+
+CD PIPELINE REQUIREMENTS  (.github/workflows/cd.yml)
+Trigger: The CD workflow must be triggered by a push event on the “develop” branch. This push event occurs automatically when a Pull Request is merged into “develop”.
+
+The CD workflow must include the following steps in order:
+Step 1 – Checkout: Check out the repository code using actions/checkout.
+Step 2 – Declare Environment: The job must specify environment: development so that the RENDER_DEPLOY_HOOK_URL environment-level secret is made available to the job.
+Step 3 – Deploy: Send an HTTP POST request to the Render deploy hook URL using curl:
+curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+Step 4 – Confirm: Output a timestamped deployment confirmation message as the final step.
+
+Additional requirements:
+The CD workflow file must declare runs-on: ubuntu-latest.
+The job must NOT contain any Docker build or push steps , that responsibility belongs exclusively to the CI workflow.
+
+WORKFLOW OVERVIEW SUMMARY
+Table 5: Workflow Design Reference
+Workflow File
+Trigger
+Key Steps
+ci.yml
+pull_request event targeting “develop” branch
+Checkout → Docker Login → Build Image → Tag → Push to Docker Hub
+cd.yml
+push event on “develop” branch (i.e., when a PR is merged)
+Checkout → Use “development” environment → curl POST to RENDER_DEPLOY_HOOK_URL
+
+MANDATORY TASKS
+Create a new GitHub repository from scratch (taskflow-cicd or team-agreed name). Do NOT reuse any previous repository.
+Team Lead: Set up the initial repository structure , create “develop” branch, commit the shared style.css, Dockerfile, and a skeleton index.html (Home / Dashboard page).
+Commit the Assignment 04 question paper (.docx) to the root of the repository. Every team member must fill in their details , including their Assigned Page , in their row in Table 1 in the versioned document.
+Team Lead: Create a GitHub Environment named “development” and configure all three secrets , DOCKERHUB_USERNAME and DOCKERHUB_TOKEN (TL's own Docker Hub credentials) as repository-level secrets, and RENDER_DEPLOY_HOOK_URL (from TL's Render service) as an environment-level secret inside “development”.
+Team Lead: Apply Branch Protection Rules on the “develop” branch requiring CI to pass before merging.
+Create the CI workflow at .github/workflows/ci.yml , triggered on pull_request targeting “develop”.
+Create the CD workflow at .github/workflows/cd.yml , triggered on push to “develop”.
+Each team member must independently complete the following full DevOps flow for their assigned page (refer to Table 3):
+Create a feature branch: feature/<github-username>/<page-name>
+Build the assigned HTML page with proper content and link it to style.css
+Commit the page and push the feature branch to GitHub
+Open a Pull Request (PR) targeting “develop” , verify CI workflow fires and passes
+Request a review; after approval the Team Lead merges the PR , verify CD fires and deploys
+After all 5 PRs are merged, verify the live TaskFlow application on Render contains all five pages and navigation between them works correctly.
+Capture all mandatory screenshots (see Submission Requirements).
+
+TASKS & MARKING SCHEME
+Table 6: Marks Breakdown
+Sr #
+Task Description
+Max Marks
+
+Repository Setup & Assignment Versioning
+10 Marks
+1
+Create a new GitHub repository from scratch (do NOT reuse any previous assignment repo)
+05
+2
+Version the Assignment 04 question paper (Assignment_04_Spring2026.docx) inside the repo root; each member fills their row including Assigned Page
+05
+
+GitHub Development Environment & Secrets Setup
+10 Marks
+3
+Create a GitHub Environment named “development”
+03
+4
+Configure repository-level secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN (Team Lead's credentials)
+04
+5
+Configure environment-level secret: RENDER_DEPLOY_HOOK_URL (Team Lead's Render service) inside “development”
+03
+
+Individual Page Development (Full Git & GitHub Flow)
+25 Marks
+6
+Each member creates their feature branch using the correct naming convention (feature/<username>/<page-name>)
+05
+7
+Each member builds their assigned HTML page with appropriate content, linked to shared style.css
+10
+8
+Each member opens a PR targeting “develop”; PR description is meaningful and CI passes before merge
+10
+
+CI Pipeline – Build & Push Docker Image (ci.yml)
+25 Marks
+9
+CI workflow file created at .github/workflows/ci.yml with correct pull_request trigger targeting “develop”
+07
+10
+Checkout code, login to Docker Hub using Team Lead's repository secrets
+06
+11
+Build Docker image and tag correctly (latest and/or commit SHA)
+06
+12
+Push image to Docker Hub successfully; workflow exits on any step failure
+06
+
+CD Pipeline – Automated Deployment to Render (cd.yml)
+20 Marks
+13
+CD workflow file created at .github/workflows/cd.yml with correct push trigger on “develop”
+06
+14
+Job declares environment: development and accesses RENDER_DEPLOY_HOOK_URL correctly
+07
+15
+Deploy step invokes Render webhook via curl POST; deployed app on Render contains all 5 pages
+07
+
+End-to-End Verification, Screenshots & Reflection
+10 Marks
+16
+Screenshots: CI run, Docker Hub image with tags, CD run, live Render URL with all 5 pages visible
+05
+17
+Individual reflection (4–5 lines per member) on CI/CD integration and page development experience
+05
+
+TOTAL
+100 Marks
+
+SUBMISSION REQUIREMENTS
+The Team Lead must submit the following on LMS:
+Completed Assignment 04 document with all group details filled in (including each member's Assigned Page).
+GitHub repository URL (must be public or shared with the instructor).
+Render live application URL.
+Screenshot 1: GitHub “development” Environment showing all three secrets configured.
+Screenshot 2: Each member's CI workflow run triggered by their individual PR , all steps green (one screenshot per member, or a combined view).
+Screenshot 3: Docker Hub repository page showing the pushed image with correct tags.
+Screenshot 4: CD workflow run triggered by a push to “develop” , deploy step completed.
+Screenshot 5: Live TaskFlow application on Render showing all five pages are accessible.
+Screenshot 6: The Assignment 04 .docx file visible in the GitHub repository file listing.
+Individual reflection: Each team member must write 4–5 lines on what they learnt and any challenges they faced.
+
+VERIFICATION SCREENSHOTS
+Paste your verification screenshots in the table below. Label each one clearly.
+Screenshot Label
+Screenshot (Paste Here)
+GitHub “development” Environment & All Secrets
+
+CI Workflow Runs – Triggered by each member's PR (all steps green)
+
+Docker Hub – Pushed Image with Tags
+
+CD Workflow Run – Triggered by Push to “develop”
+
+Live TaskFlow on Render – All 5 Pages Accessible
+
+Assignment 04 .docx Visible in GitHub Repo
+
+
+TEAM REFLECTION
+Each team member must individually write 4–5 lines covering: what was learnt, the most challenging part of the assignment, and how the team resolved it.
+
+Member 1  (Name: _______________________________________________)
+
+
+
+
+Member 2  (Name: _______________________________________________)
+
+
+
+
+Member 3  (Name: _______________________________________________)
+
+
+
+
+Member 4  (Name: _______________________________________________)
+
+
+
+
+Member 5  (Name: _______________________________________________)
+
+
+

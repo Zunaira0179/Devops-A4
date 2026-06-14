@@ -1,0 +1,33 @@
+name: TaskFlow CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy-to-render:
+    runs-on: ubuntu-latest
+    
+    # Step 2: Declare environment so environment-level secrets are available
+    environment: development
+
+    steps:
+      # Step 1: Checkout Repository Code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 3: Trigger Deployment on Render via Deploy Webhook Hook Hook
+      - name: Trigger Render Deploy Hook
+        run: |
+          echo "Initiating deployment trigger..."
+          curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          echo ""
+
+      # Step 4: Output timestamped deployment confirmation message
+      - name: Confirm Deployment Triggered
+        run: |
+          echo "============================================================"
+          echo "Deployment webhook successfully triggered to Render environment."
+          echo "Trigger Timestamp: $(date -u)"
+          echo "============================================================"

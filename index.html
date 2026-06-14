@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - DevOps Command Center</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <span>TaskFlow</span>
+                <div class="logo-dot"></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="add-task.html">Add Task</a></li>
+                <li><a href="task-list.html">Task List</a></li>
+                <li><a href="task-detail.html">Task Detail</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-container">
+        
+        <!-- Welcome Hero Banner -->
+        <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(13, 18, 33, 0.75) 100%);">
+            <h1 style="margin-bottom: 0.5rem;">Welcome to TaskFlow</h1>
+            <p style="font-size: 1.1rem; max-width: 800px; margin-bottom: 1rem;">
+                Your collaborative, containerized DevOps task management pipeline. Monitor project metrics, add priorities, track completions, and manage team workflows effortlessly.
+            </p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="add-task.html" class="btn btn-primary">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+                    Create New Task
+                </a>
+                <a href="task-list.html" class="btn btn-secondary">View Task Board</a>
+            </div>
+        </div>
+
+        <!-- Dynamic Statistics Metrics Grid -->
+        <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">Command Metrics</h2>
+        <div class="metrics-grid">
+            
+            <div class="metric-card metric-total">
+                <div class="metric-icon">📁</div>
+                <div class="metric-info">
+                    <span class="metric-value" id="count-total">0</span>
+                    <span class="metric-label">Total Tasks</span>
+                </div>
+            </div>
+
+            <div class="metric-card metric-pending">
+                <div class="metric-icon">⏳</div>
+                <div class="metric-info">
+                    <span class="metric-value" id="count-pending">0</span>
+                    <span class="metric-label">Pending</span>
+                </div>
+            </div>
+
+            <div class="metric-card metric-completed">
+                <div class="metric-icon">✅</div>
+                <div class="metric-info">
+                    <span class="metric-value" id="count-completed">0</span>
+                    <span class="metric-label">Completed</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Quick Activity Board & Repo Info -->
+        <div class="grid-2col">
+            
+            <!-- Recent Tasks Panel -->
+            <div class="card">
+                <h3>Recent Activities</h3>
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Quick overview of the latest tasks in queue:</p>
+                <div class="table-responsive" style="border: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task Title</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-tasks-body">
+                            <!-- Populated dynamically by JavaScript -->
+                            <tr>
+                                <td colspan="3" class="empty-state">No recent activities available.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- DevOps Environment & Workspace Status -->
+            <div class="card">
+                <h3>DevOps Deployment Pipeline</h3>
+                <p style="margin-bottom: 1.25rem; font-size: 0.9rem;">
+                    Deployment configurations, CI/CD health check hooks, and container runtimes.
+                </p>
+                <div class="step-list">
+                    <div class="step-item">
+                        <div class="step-number">CI</div>
+                        <div class="step-content">
+                            <h4>Build Pipeline</h4>
+                            <p style="margin-bottom:0; font-size: 0.85rem;">Automatically logs in, builds container from <code>Dockerfile</code> and pushes to Docker Hub on PR creation.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">CD</div>
+                        <div class="step-content">
+                            <h4>Delivery Pipeline</h4>
+                            <p style="margin-bottom:0; font-size: 0.85rem;">Deploys live static changes to Render using webhooks when commits merge to the <code>develop</code> branch.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Shared Footer -->
+    <footer>
+        <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 TaskFlow Core DevOps. Structured and developed by the Team Lead.</p>
+    </footer>
+
+    <!-- Client-Side State Manager -->
+    <script>
+        // Seed initial data if localStorage is empty
+        const defaultTasks = [
+            { id: "1", title: "Set up Docker Containerization", desc: "Write Dockerfile to serve TaskFlow statically using Nginx Alpine.", date: "2026-06-15", priority: "High", status: "Completed" },
+            { id: "2", title: "Configure GitHub Environments & Secrets", desc: "Set up Development Environment and secrets: Docker Hub credentials & Render webhook.", date: "2026-06-15", priority: "High", status: "Completed" },
+            { id: "3", title: "Implement Home Dashboard", desc: "Build index.html showing metrics and links to other pages.", date: "2026-06-16", priority: "Medium", status: "Completed" },
+            { id: "4", title: "Add Task Form Integration", desc: "Build add-task.html with a form to enter task details and store in localStorage.", date: "2026-06-18", priority: "Medium", status: "Pending" },
+            { id: "5", title: "Task List Filter Logic", desc: "Build task-list.html to filter tasks by all, pending, or completed status.", date: "2026-06-20", priority: "Low", status: "Pending" }
+        ];
+
+        function getTasks() {
+            const raw = localStorage.getItem('taskflow_tasks');
+            if (!raw) {
+                localStorage.setItem('taskflow_tasks', JSON.stringify(defaultTasks));
+                return defaultTasks;
+            }
+            return JSON.parse(raw);
+        }
+
+        function renderDashboard() {
+            const tasks = getTasks();
+            
+            // Calculate stats
+            const total = tasks.length;
+            const pending = tasks.filter(t => t.status === 'Pending').length;
+            const completed = tasks.filter(t => t.status === 'Completed').length;
+
+            // Render stats
+            document.getElementById('count-total').innerText = total;
+            document.getElementById('count-pending').innerText = pending;
+            document.getElementById('count-completed').innerText = completed;
+
+            // Render recent tasks (up to 4)
+            const recentBody = document.getElementById('recent-tasks-body');
+            const recentTasks = tasks.slice(-4).reverse(); // last 4 items, newest first
+
+            if (recentTasks.length === 0) {
+                recentBody.innerHTML = `<tr><td colspan="3" class="empty-state">No tasks available. Add some in Add Task page.</td></tr>`;
+                return;
+            }
+
+            recentBody.innerHTML = recentTasks.map(task => {
+                let pClass = 'badge-primary';
+                if (task.priority === 'High') pClass = 'badge-danger';
+                else if (task.priority === 'Medium') pClass = 'badge-warning';
+
+                let sClass = task.status === 'Completed' ? 'badge-success' : 'badge-warning';
+
+                return `
+                    <tr>
+                        <td style="font-weight: 500;">
+                            <a href="task-detail.html?id=${task.id}" style="color: inherit; text-decoration: none; hover: underline;">
+                                ${task.title}
+                            </a>
+                        </td>
+                        <td><span class="badge ${pClass}">${task.priority}</span></td>
+                        <td><span class="badge ${sClass}">${task.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Run when content loads
+        document.addEventListener('DOMContentLoaded', renderDashboard);
+    </script>
+</body>
+</html>

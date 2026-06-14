@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Task Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <span>TaskFlow</span>
+                <div class="logo-dot"></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-task.html">Add Task</a></li>
+                <li><a href="task-list.html">Task List</a></li>
+                <li><a href="task-detail.html" class="active">Task Detail</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-container">
+
+        <!-- DELEGATION BANNER (For Team Member) -->
+        <div class="stub-note">
+            <h3>🚧 Member 4 Tasks & Requirements</h3>
+            <p>This page is assigned to <strong>Member 4</strong>. In your personal feature branch, implement the following:</p>
+            <ul>
+                <li>Branch Convention: <code>feature/&lt;github-username&gt;/task-detail</code></li>
+                <li>Read the Task ID from the URL search query parameters (e.g. <code>?id=123</code>).</li>
+                <li>Load the task details from <code>localStorage</code> and display them dynamically.</li>
+                <li>Provide buttons to:
+                    <ol>
+                        <li><strong>Mark Complete</strong>: Updates task status to "Completed" in <code>localStorage</code>.</li>
+                        <li><strong>Delete Task</strong>: Removes task node from <code>localStorage</code> and redirects user to task list.</li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Detail Card Container -->
+        <div class="card" id="detail-card">
+            <div id="task-detail-content">
+                <!-- Loaded dynamically by script -->
+                <div class="empty-state">
+                    <span class="empty-state-icon">🔍</span>
+                    No active node selected. Select a task from the <a href="task-list.html" style="color: var(--primary);">Task Board</a>.
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 TaskFlow Core DevOps. Template created by Team Lead.</p>
+    </footer>
+
+    <!-- Task Detail Script -->
+    <script>
+        function getTasks() {
+            const raw = localStorage.getItem('taskflow_tasks');
+            return raw ? JSON.parse(raw) : [];
+        }
+
+        function saveTasks(tasks) {
+            localStorage.setItem('taskflow_tasks', JSON.stringify(tasks));
+        }
+
+        function getTaskIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        function loadTaskDetail() {
+            const id = getTaskIdFromUrl();
+            if (!id) return;
+
+            const tasks = getTasks();
+            const task = tasks.find(t => t.id === id);
+            const contentDiv = document.getElementById('task-detail-content');
+
+            if (!task) {
+                contentDiv.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-state-icon">⚠️</span>
+                        Task Node ID <strong>"${id}"</strong> not found in database registry.
+                        <br><br>
+                        <a href="task-list.html" class="btn btn-secondary">Back to Task Board</a>
+                    </div>
+                `;
+                return;
+            }
+
+            let pClass = 'badge-primary';
+            if (task.priority === 'High') pClass = 'badge-danger';
+            else if (task.priority === 'Medium') pClass = 'badge-warning';
+
+            let sClass = task.status === 'Completed' ? 'badge-success' : 'badge-warning';
+
+            contentDiv.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:1.5rem; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+                    <div>
+                        <span class="badge ${sClass}" style="margin-bottom:0.5rem;">${task.status}</span>
+                        <h1 style="margin-bottom:0;">${task.title}</h1>
+                    </div>
+                    <div style="display:flex; gap:0.75rem;">
+                        <a href="task-list.html" class="btn btn-secondary">Back</a>
+                        ${task.status === 'Pending' ? `<button onclick="markComplete('${task.id}')" class="btn btn-primary">Mark Completed</button>` : ''}
+                        <button onclick="deleteTask('${task.id}')" class="btn btn-danger">Delete Task</button>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div>
+                        <div class="detail-section">
+                            <div class="detail-label">Task Description</div>
+                            <p class="detail-val" style="white-space: pre-wrap; font-size:1.1rem; line-height:1.7;">${task.desc}</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="detail-meta-card">
+                            <h3 style="font-size:1.1rem; margin-bottom:1rem; border-bottom: 1px solid var(--border-color); padding-bottom:0.5rem;">Metadata</h3>
+                            
+                            <div class="detail-section" style="margin-bottom:1rem;">
+                                <div class="detail-label">Due Date</div>
+                                <div class="detail-val" style="font-weight:600;">⏳ ${task.date}</div>
+                            </div>
+
+                            <div class="detail-section" style="margin-bottom:1rem;">
+                                <div class="detail-label">Priority Level</div>
+                                <div class="detail-val"><span class="badge ${pClass}">${task.priority}</span></div>
+                            </div>
+
+                            <div class="detail-section" style="margin-bottom:0;">
+                                <div class="detail-label">Node Identifier</div>
+                                <div class="detail-val" style="font-family:monospace; font-size:0.85rem; color: var(--text-muted);">${task.id}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function markComplete(id) {
+            const tasks = getTasks();
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.status = 'Completed';
+                saveTasks(tasks);
+                alert('Task marked as Completed!');
+                loadTaskDetail();
+            }
+        }
+
+        function deleteTask(id) {
+            if (confirm('Are you sure you want to delete this task node?')) {
+                const tasks = getTasks();
+                const filtered = tasks.filter(t => t.id !== id);
+                saveTasks(filtered);
+                alert('Task deleted successfully!');
+                window.location.href = 'task-list.html';
+            }
+        }
+
+        // Initialize details on load
+        document.addEventListener('DOMContentLoaded', loadTaskDetail);
+    </script>
+</body>
+</html>

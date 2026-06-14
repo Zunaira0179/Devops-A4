@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Add Task</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <span>TaskFlow</span>
+                <div class="logo-dot"></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-task.html" class="active">Add Task</a></li>
+                <li><a href="task-list.html">Task List</a></li>
+                <li><a href="task-detail.html">Task Detail</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-container">
+
+        <!-- DELEGATION BANNER (For Team Member) -->
+        <div class="stub-note">
+            <h3>🚧 Member 2 Tasks & Requirements</h3>
+            <p>This page is assigned to <strong>Member 2</strong>. In your personal feature branch, implement the following:</p>
+            <ul>
+                <li>Branch Convention: <code>feature/&lt;github-username&gt;/add-task</code></li>
+                <li>Implement a clean form allowing the user to enter a new task.</li>
+                <li>Include input fields: Title, Description (textarea), Due Date, and Priority dropdown (High / Medium / Low).</li>
+                <li>Store the submitted task in browser <code>localStorage</code> so it integrates with other pages.</li>
+                <li>Redirect the user to the Task List page (<code>task-list.html</code>) after successful task creation.</li>
+            </ul>
+        </div>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <h1>Create New Task</h1>
+            <p>Fill in the details below to add a new task to the command registry.</p>
+            
+            <form id="add-task-form">
+                <div class="form-group">
+                    <label for="task-title">Task Title</label>
+                    <input type="text" id="task-title" class="form-control" placeholder="e.g. Deploy staging container" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-desc">Description</label>
+                    <textarea id="task-desc" class="form-control" placeholder="Describe the scope of this task..." required></textarea>
+                </div>
+
+                <div class="grid-2col" style="gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="task-date">Due Date</label>
+                        <input type="date" id="task-date" class="form-control" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority" class="form-control" required>
+                            <option value="High">High</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <a href="index.html" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 TaskFlow Core DevOps. Template created by Team Lead.</p>
+    </footer>
+
+    <!-- Form Handler Script -->
+    <script>
+        document.getElementById('add-task-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('task-title').value;
+            const desc = document.getElementById('task-desc').value;
+            const date = document.getElementById('task-date').value;
+            const priority = document.getElementById('task-priority').value;
+
+            // Load existing tasks
+            const raw = localStorage.getItem('taskflow_tasks');
+            const tasks = raw ? JSON.parse(raw) : [];
+
+            // Generate unique id
+            const newId = Date.now().toString();
+
+            // Create task object
+            const newTask = {
+                id: newId,
+                title,
+                desc,
+                date,
+                priority,
+                status: 'Pending'
+            };
+
+            // Push and Save
+            tasks.push(newTask);
+            localStorage.setItem('taskflow_tasks', JSON.stringify(tasks));
+
+            // Notify & Redirect
+            alert('Task successfully registered in local registry!');
+            window.location.href = 'task-list.html';
+        });
+
+        // Set default date to today
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('task-date').value = today;
+        });
+    </script>
+</body>
+</html>

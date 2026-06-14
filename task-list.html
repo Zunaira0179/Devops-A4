@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Task Board</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <span>TaskFlow</span>
+                <div class="logo-dot"></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-task.html">Add Task</a></li>
+                <li><a href="task-list.html" class="active">Task List</a></li>
+                <li><a href="task-detail.html">Task Detail</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-container">
+
+        <!-- DELEGATION BANNER (For Team Member) -->
+        <div class="stub-note">
+            <h3>🚧 Member 3 Tasks & Requirements</h3>
+            <p>This page is assigned to <strong>Member 3</strong>. In your personal feature branch, implement the following:</p>
+            <ul>
+                <li>Branch Convention: <code>feature/&lt;github-username&gt;/task-list</code></li>
+                <li>Create a clean, responsive HTML table displaying tasks.</li>
+                <li>Columns: Title, Due Date, Priority, and Status.</li>
+                <li>Implement filter buttons (All / Pending / Completed) to sort or toggle tasks based on their active status dynamically.</li>
+                <li>Enable table rows to navigate or link directly to <code>task-detail.html?id=TASK_ID</code>.</li>
+            </ul>
+        </div>
+
+        <!-- Board Header Action Bar -->
+        <div class="action-bar">
+            <div>
+                <h1>Task Board</h1>
+                <p style="margin: 0; font-size: 0.9rem;">View and manage active registry nodes.</p>
+            </div>
+            
+            <div class="filter-group">
+                <button class="filter-btn active" id="filter-all" onclick="filterTasks('All')">All</button>
+                <button class="filter-btn" id="filter-pending" onclick="filterTasks('Pending')">Pending</button>
+                <button class="filter-btn" id="filter-completed" onclick="filterTasks('Completed')">Completed</button>
+            </div>
+        </div>
+
+        <!-- Task Table Grid Card -->
+        <div class="card" style="padding: 1.5rem;">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Due Date</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-table-body">
+                        <!-- Populated dynamically by JavaScript -->
+                        <tr>
+                            <td colspan="5" class="empty-state">Loading registry...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p style="margin: 0; font-size: 0.85rem;">&copy; 2026 TaskFlow Core DevOps. Template created by Team Lead.</p>
+    </footer>
+
+    <!-- Task Board Script -->
+    <script>
+        let currentFilter = 'All';
+
+        function getTasks() {
+            const raw = localStorage.getItem('taskflow_tasks');
+            return raw ? JSON.parse(raw) : [];
+        }
+
+        function filterTasks(status) {
+            currentFilter = status;
+            
+            // Toggle active classes on buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (status === 'All') document.getElementById('filter-all').classList.add('active');
+            else if (status === 'Pending') document.getElementById('filter-pending').classList.add('active');
+            else if (status === 'Completed') document.getElementById('filter-completed').classList.add('active');
+
+            renderTable();
+        }
+
+        function renderTable() {
+            const tasks = getTasks();
+            const tableBody = document.getElementById('task-table-body');
+            
+            // Filter tasks
+            const filteredTasks = tasks.filter(task => {
+                if (currentFilter === 'All') return true;
+                return task.status === currentFilter;
+            });
+
+            if (filteredTasks.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <span class="empty-state-icon">📋</span>
+                            No tasks found matching standard filter status "${currentFilter}".
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = filteredTasks.map(task => {
+                let pClass = 'badge-primary';
+                if (task.priority === 'High') pClass = 'badge-danger';
+                else if (task.priority === 'Medium') pClass = 'badge-warning';
+
+                let sClass = task.status === 'Completed' ? 'badge-success' : 'badge-warning';
+
+                return `
+                    <tr>
+                        <td style="font-weight: 600; color: #f3f4f6;">${task.title}</td>
+                        <td>${task.date}</td>
+                        <td><span class="badge ${pClass}">${task.priority}</span></td>
+                        <td><span class="badge ${sClass}">${task.status}</span></td>
+                        <td style="text-align: right;">
+                            <a href="task-detail.html?id=${task.id}" class="btn btn-secondary btn-sm">Inspect</a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Initialize table
+        document.addEventListener('DOMContentLoaded', renderTable);
+    </script>
+</body>
+</html>
