@@ -173,6 +173,24 @@
 
         // Initialize details on load
         document.addEventListener('DOMContentLoaded', loadTaskDetail);
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        let tasks = JSON.parse(localStorage.getItem("taskflow_tasks")) || [];
+
+        let task = tasks.find(t => String(t.id) === String(id));
+
+        function markComplete() {
+            task.status = "Completed";
+            localStorage.setItem("taskflow_tasks", JSON.stringify(tasks));
+            location.reload();
+        }
+
+        function deleteTask() {
+            let updated = tasks.filter(t => String(t.id) !== String(id));
+            localStorage.setItem("taskflow_tasks", JSON.stringify(updated));
+            window.location.href = "tasklist.html";
+        }
     </script>
 </body>
 </html>

@@ -6,7 +6,8 @@
     <title>TaskFlow - Task Board</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body>  
+
 
     <!-- Header Navigation -->
     <header>
@@ -47,13 +48,14 @@
                 <h1>Task Board</h1>
                 <p style="margin: 0; font-size: 0.9rem;">View and manage active registry nodes.</p>
             </div>
-            
+
             <div class="filter-group">
                 <button class="filter-btn active" id="filter-all" onclick="filterTasks('All')">All</button>
-                <button class="filter-btn" id="filter-pending" onclick="filterTasks('Pending')">Pending</button>
-                <button class="filter-btn" id="filter-completed" onclick="filterTasks('Completed')">Completed</button>
+                <button class="filter-btn" id="filter-Pending" onclick="filterTasks('Pending')">Pending</button>
+                <button class="filter-btn" id="filter-Completed" onclick="filterTasks('Completed')">Completed</button>
             </div>
         </div>
+        <a href="task-detail.html?id=TASK_ID">Inspect</a>
 
         <!-- Task Table Grid Card -->
         <div class="card" style="padding: 1.5rem;">
@@ -100,8 +102,8 @@
             // Toggle active classes on buttons
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             if (status === 'All') document.getElementById('filter-all').classList.add('active');
-            else if (status === 'Pending') document.getElementById('filter-pending').classList.add('active');
-            else if (status === 'Completed') document.getElementById('filter-completed').classList.add('active');
+            else if (status === 'Pending') document.getElementById('filter-Pending').classList.add('active');
+            else if (status === 'Completed') document.getElementById('filter-Completed').classList.add('active');
 
             renderTable();
         }
@@ -109,6 +111,8 @@
         function renderTable() {
             const tasks = getTasks();
             const tableBody = document.getElementById('task-table-body');
+            const tasks = JSON.parse(localStorage.getItem("taskflow_tasks")) || [];
+
             
             // Filter tasks
             const filteredTasks = tasks.filter(task => {
@@ -127,7 +131,6 @@
                 `;
                 return;
             }
-
             tableBody.innerHTML = filteredTasks.map(task => {
                 let pClass = 'badge-primary';
                 if (task.priority === 'High') pClass = 'badge-danger';
@@ -151,6 +154,35 @@
 
         // Initialize table
         document.addEventListener('DOMContentLoaded', renderTable);
+        let tasks = JSON.parse(localStorage.getItem("taskflow_tasks")) || [];
+
+        function render(data) {
+            let tbody = document.getElementById("taskTableBody");
+            tbody.innerHTML = "";
+
+            data.forEach(task => {
+                tbody.innerHTML += `
+        <tr>
+            <td>${task.title}</td>
+            <td>${task.date}</td>
+            <td>${task.priority}</td>
+            <td>${task.status}</td>
+            <td>
+                <a href="taskdetail.html?id=${task.id}">
+                    Inspect
+                </a>
+            </td>
+        </tr>`;
+            });
+        }
+
+        function filter(type) {
+            if (type === "All") render(tasks);
+            else render(tasks.filter(t => t.status === type));
+        }
+
+        render(tasks);
+        <a href="task-detail.html?id=${task.id}">Inspect</a>
     </script>
 </body>
 </html>
