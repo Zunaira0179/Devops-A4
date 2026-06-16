@@ -27,7 +27,11 @@
 
     <!-- Main Workspace -->
     <main class="app-container">
-
+        <h2 id="title"></h2>
+        <p id="desc"></p>
+        <p id="status"></p>
+        <button onclick="markComplete()">Mark Complete</button>
+        <button onclick="deleteTask()">Delete Task</button>
         <!-- DELEGATION BANNER (For Team Member) -->
         <div class="stub-note">
             <h3>🚧 Member 4 Tasks & Requirements</h3>
@@ -36,7 +40,8 @@
                 <li>Branch Convention: <code>feature/&lt;github-username&gt;/task-detail</code></li>
                 <li>Read the Task ID from the URL search query parameters (e.g. <code>?id=123</code>).</li>
                 <li>Load the task details from <code>localStorage</code> and display them dynamically.</li>
-                <li>Provide buttons to:
+                <li>
+                    Provide buttons to:
                     <ol>
                         <li><strong>Mark Complete</strong>: Updates task status to "Completed" in <code>localStorage</code>.</li>
                         <li><strong>Delete Task</strong>: Removes task node from <code>localStorage</code> and redirects user to task list.</li>
@@ -190,6 +195,40 @@
             let updated = tasks.filter(t => String(t.id) !== String(id));
             localStorage.setItem("taskflow_tasks", JSON.stringify(updated));
             window.location.href = "tasklist.html";
+        }
+        const params = new URLSearchParams(window.location.search);
+        const taskId = params.get("id");
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        let task = tasks.find(t => t.id == taskId);
+        if (task) {
+            document.getElementById("title").innerText = task.title;
+            document.getElementById("desc").innerText = task.description;
+            document.getElementById("status").innerText = task.status;
+        } else {
+            document.body.innerHTML = "<h2>Task not found</h2>";
+        }
+        function markComplete() {
+            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+            tasks = tasks.map(t => {
+                if (t.id == taskId) {
+                    return { ...t, status: "Completed" };
+                }
+                return t;
+            });
+
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            location.reload();
+            function deleteTask() {
+                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+                tasks = tasks.filter(t => t.id != taskId);
+
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+
+                window.location.href = "task-list.html";
+            }
         }
     </script>
 </body>
